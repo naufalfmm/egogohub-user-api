@@ -1,0 +1,31 @@
+{
+  "name": "egogohub-user-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "migrate:config": "node ./db/generateConfig.js",
+    "migrate": "node node_modules/db-migrate/bin/db-migrate --config \"./db/database.json\" -m \"./db/migrations\" -e pg",
+    "migrate:create": "npm run migrate create",
+    "migrate:up": "npm run migrate up",
+    "migrate:down": "npm run migrate down",
+    "migrate:reset": "npm run migrate reset"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cli-color": "^2.0.4",
+    "cors": "^2.8.5",
+    "dayjs": "^1.11.12",
+    "db-migrate": "^0.11.14",
+    "db-migrate-pg": "^1.5.2",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-validator": "^7.1.0",
+    "pg": "^8.12.0",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.37.3"
+  }
+}

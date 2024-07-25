@@ -1,0 +1,10 @@
+CREATE TABLE IF NOT EXISTS users (
+    id BIGSERIAL NOT NULL,
+    name TEXT NOT NULL,
+    email TEXT NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    
+    PRIMARY KEY(id),
+    CONSTRAINT uq_user_email UNIQUE(email)
+);
