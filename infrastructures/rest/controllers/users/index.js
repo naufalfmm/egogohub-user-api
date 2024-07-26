@@ -1,11 +1,24 @@
 'use strict';
 
-const e = require("cors");
 const { user_response_from_dao, user_paginated_from_data } = require("../../../../models/dto/user");
 const { validation_error_helper, success_helper, error_helper } = require("../../../../utils/resp_helper");
 const { status_code } = require("../../../../consts/consts");
 const { validationResult } = require("express-validator");
 const { pagination_request_from_req } = require("../../../../models/dto/pagination");
+const { email_used_err } = require("../../../../consts/errors");
+const UniqueError = require("../../../../errors/uniqueError");
+
+const error_handler = {
+    create_update: (res, err) => {
+        let code = status_code.internal_status_error
+
+        if (err instanceof UniqueError) {
+            code = status_code.conflict
+        }
+
+        return error_helper(res, code, err)
+    }
+}
 
 module.exports = class user_controllers {
     usecases
@@ -30,7 +43,7 @@ module.exports = class user_controllers {
 
             return success_helper(res, status_code.created, user_response_from_dao(data))
         } catch (error) {
-            return error_helper(res, status_code.internal_status_error, error)
+            return error_handler.create_update(res, error)
         }
     }
 
@@ -48,7 +61,7 @@ module.exports = class user_controllers {
 
             return success_helper(res, status_code.ok, user_response_from_dao(data))
         } catch (error) {
-            return error_helper(res, status_code.internal_status_error, error)
+            return error_handler.create_update(res, error)
         }
     }
 

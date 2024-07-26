@@ -1,6 +1,7 @@
 'use strict';
 
 const dayjs = require("dayjs");
+const { email_used_err } = require("../../consts/errors");
 
 module.exports = class user_usecases {
     persistents
@@ -20,6 +21,10 @@ module.exports = class user_usecases {
                 updated_at: dayjs()
             })
         } catch (error) {
+            if (error.name == 'SequelizeUniqueConstraintError') {
+                throw email_used_err
+            }
+
             throw error
         }
     }
@@ -34,6 +39,10 @@ module.exports = class user_usecases {
 
             return await this.persistents.repositories.user.get_by_id(id)
         } catch (error) {
+            if (error.name == 'SequelizeUniqueConstraintError') {
+                throw email_used_err
+            }
+
             throw error;
         }
     }

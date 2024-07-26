@@ -1,6 +1,7 @@
 'use strict';
 
 const { status_code } = require("../../consts/consts");
+const ValidationError = require("../../errors/validationError");
 
 module.exports.success_helper = (res, code, data) => {
     if (data instanceof Array) {
@@ -21,24 +22,20 @@ module.exports.success_helper = (res, code, data) => {
 }
 
 module.exports.error_helper = (res, code, err) => {
-    if (err.name = 'SequelizeUniqueConstraintError') {
-        code = status_code.conflict
-    }
-
     return res.status(code).json({
         ok: false,
-        message: err.toString()
+        message: err.name,
+        data: {
+            error: (err.messages || err.message)
+        }
     })
 }
 
 module.exports.validation_error_helper = (res, val_errs) => {
-    let err_msg = ''
+    let errs = []
     for (let i = 0; i < val_errs.length; i++) {
-        err_msg = err_msg + `${val_errs[i].path}: ${val_errs[i].msg}\n`
+        errs.push(`${val_errs[i].path}: ${val_errs[i].msg}`)
     }
 
-    return res.status(status_code.bad_request).json({
-        ok: false,
-        message: err_msg
-    })
+    return this.error_helper(res, status_code.bad_request, new ValidationError(errs))
 }
