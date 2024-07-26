@@ -1,6 +1,7 @@
 'use strict';
 
 const { status_code } = require("../../consts/consts");
+const InternalServerError = require("../../errors/internalServerError");
 const ValidationError = require("../../errors/validationError");
 
 module.exports.success_helper = (res, code, data) => {
@@ -22,6 +23,10 @@ module.exports.success_helper = (res, code, data) => {
 }
 
 module.exports.error_helper = (res, code, err) => {
+    if (code == status_code.internal_status_error) {
+        err = new InternalServerError(err.message)
+    }
+
     return res.status(code).json({
         ok: false,
         message: err.name,

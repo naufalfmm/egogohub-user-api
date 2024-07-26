@@ -5,7 +5,6 @@ const { validation_error_helper, success_helper, error_helper } = require("../..
 const { status_code } = require("../../../../consts/consts");
 const { validationResult } = require("express-validator");
 const { pagination_request_from_req } = require("../../../../models/dto/pagination");
-const { email_used_err } = require("../../../../consts/errors");
 const UniqueError = require("../../../../errors/uniqueError");
 
 const error_handler = {
